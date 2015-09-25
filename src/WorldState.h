@@ -105,6 +105,7 @@ public:
 		// TODO Put your code for a rotation of phi about axis here.
 		//
 		//
+        
 		
 	}
 	
@@ -114,10 +115,12 @@ public:
 		
 		//
 		//
-		// TODO Put your code for a translation in the x,y direction here.
+		// Done Put your code for a translation in the x,y direction here.
 		//
-		//
-        
+		//*
+        glm::vec3 xyDifference = glm::vec3((newPos.x - oldPos.x)*XY_SENSITIVITY, -(newPos.y - oldPos.y)*XY_SENSITIVITY, 0);
+        translateFromInput = glm::translate(glm::mat4(1.0f), xyDifference);
+        currentModelTransform = currentModelTransform * translateFromInput;
 	}
 	
 	void updateZTranslate(glm::ivec2 & oldPos, glm::ivec2 & newPos)
@@ -126,10 +129,12 @@ public:
 		
 		//
 		//
-		// TODO Put your code for a translation in the z direction here.
+		// Done Put your code for a translation in the z direction here.
 		//
 		//
-		
+        glm::vec3 xyDifference = glm::vec3(0,0,(oldPos[0] - newPos[0])*Z_SENSITIVITY);
+        translateFromInput = glm::translate(glm::mat4(1.0f), xyDifference);
+        currentModelTransform = currentModelTransform * translateFromInput;
 	}
 	
 	void setSize(unsigned int x, unsigned int y)

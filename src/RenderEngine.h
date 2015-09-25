@@ -88,7 +88,7 @@ public:
 		//
 		//
 		
-        glm::mat4 beingReplaced = glm::perspective((float)(M_PI / 3), (float)newWidth/newHeight, 0.1f, 100.0f);
+        glm::mat4 beingReplaced = glm::perspective((float)(3.14 / 3), (float)newWidth/newHeight, 0.1f, 100.0f);
         this->P = beingReplaced;
         glViewport(0, 0, newWidth, newHeight);
 	}
