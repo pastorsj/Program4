@@ -27,7 +27,7 @@ private:
 		// TODO Put your code for an incremental rotation here.
 		//
 		//
-        
+        currentModelTransform = rotationSpinStep * currentModelTransform;
 	}
 
 public:
@@ -106,7 +106,9 @@ public:
 		//
 		//
         
-		
+        rotationSpinStep = glm::rotate(glm::mat4(1.0f), phi*ROT_SENSITIVITY, axis);
+        currentModelTransform = rotationSpinStep * currentModelTransform;
+        //currentModelTransform = currentModelTransform * rotationSpinStep;
 	}
 	
 	void updateXYTranslate(glm::ivec2 & oldPos, glm::ivec2 & newPos)
@@ -120,7 +122,8 @@ public:
 		//*
         glm::vec3 xyDifference = glm::vec3((newPos.x - oldPos.x)*XY_SENSITIVITY, -(newPos.y - oldPos.y)*XY_SENSITIVITY, 0);
         translateFromInput = glm::translate(glm::mat4(1.0f), xyDifference);
-        currentModelTransform = currentModelTransform * translateFromInput;
+        currentModelTransform = translateFromInput * currentModelTransform;
+        //currentModelTransform = currentModelTransform * translateFromInput;
 	}
 	
 	void updateZTranslate(glm::ivec2 & oldPos, glm::ivec2 & newPos)
@@ -134,7 +137,8 @@ public:
 		//
         glm::vec3 xyDifference = glm::vec3(0,0,(oldPos[0] - newPos[0])*Z_SENSITIVITY);
         translateFromInput = glm::translate(glm::mat4(1.0f), xyDifference);
-        currentModelTransform = currentModelTransform * translateFromInput;
+        //currentModelTransform = currentModelTransform * translateFromInput;
+        currentModelTransform = translateFromInput * currentModelTransform;
 	}
 	
 	void setSize(unsigned int x, unsigned int y)
