@@ -27,7 +27,8 @@ private:
 		// TODO Put your code for an incremental rotation here.
 		//
 		//
-        currentModelTransform = rotationSpinStep * currentModelTransform;
+		rotationFromInput = rotationFromInput * rotationSpinStep;
+		currentModelTransform = translateFromInput * rotationFromInput *  translateToOrigin;
 	}
 
 public:
@@ -44,6 +45,9 @@ public:
 		//
 		
         translateToOrigin = glm::translate(glm::mat4(1.0f), -model.getCentroid());
+		translateFromInput = glm::mat4(1.0f);
+		rotationFromInput = glm::mat4(1.0f);
+		rotationSpinStep = glm::mat4(1.0f);
         currentModelTransform = translateToOrigin;
 
 	}
@@ -106,9 +110,9 @@ public:
 		//
 		//
         
+		glm::vec4 newAxis = glm::inverse(rotationFromInput) * glm::vec4(axis.x, axis.y, axis.z, 1);
+		axis = glm::vec3(newAxis.r, newAxis.g, newAxis.b);
         rotationSpinStep = glm::rotate(glm::mat4(1.0f), phi*ROT_SENSITIVITY, axis);
-        currentModelTransform = rotationSpinStep * currentModelTransform;
-        //currentModelTransform = currentModelTransform * rotationSpinStep;
 	}
 	
 	void updateXYTranslate(glm::ivec2 & oldPos, glm::ivec2 & newPos)
@@ -121,9 +125,7 @@ public:
 		//
 		//*
         glm::vec3 xyDifference = glm::vec3((newPos.x - oldPos.x)*XY_SENSITIVITY, -(newPos.y - oldPos.y)*XY_SENSITIVITY, 0);
-        translateFromInput = glm::translate(glm::mat4(1.0f), xyDifference);
-        currentModelTransform = translateFromInput * currentModelTransform;
-        //currentModelTransform = currentModelTransform * translateFromInput;
+        translateFromInput *= glm::translate(glm::mat4(1.0f), xyDifference);
 	}
 	
 	void updateZTranslate(glm::ivec2 & oldPos, glm::ivec2 & newPos)
@@ -136,9 +138,7 @@ public:
 		//
 		//
         glm::vec3 xyDifference = glm::vec3(0,0,(oldPos[0] - newPos[0])*Z_SENSITIVITY);
-        translateFromInput = glm::translate(glm::mat4(1.0f), xyDifference);
-        //currentModelTransform = currentModelTransform * translateFromInput;
-        currentModelTransform = translateFromInput * currentModelTransform;
+        translateFromInput *= glm::translate(glm::mat4(1.0f), xyDifference);
 	}
 	
 	void setSize(unsigned int x, unsigned int y)
